@@ -5,17 +5,18 @@ import dotenv from "dotenv";
 import http from "http";
 import { Server as IOServer } from "socket.io";
 
-import authRoutes from "./routes/authRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
-import reviewRoutes from "./routes/reviewRoutes.js";
-import analyticsRoutes from "./routes/analyticsRoutes.js";
-import staffRoutes from "./routes/staffRoutes.js";
-import setupAdmin from "./routes/setupAdmin.js";
-import mobileRoutes from "./routes/mobileRoutes.js"; // new
-import mobileUpload from "./routes/mobileUpload.js";
-import mobileOrderRoutes from "./routes/mobileOrderRoutes.js";
+import authRoutes from "./Routes/authRoutes.js";
+import adminRoutes from "./Routes/adminRoutes.js";
+import orderRoutes from "./Routes/orderRoutes.js";
+import productRoutes from "./Routes/productRoutes.js";
+import reviewRoutes from "./Routes/reviewRoutes.js";
+import analyticsRoutes from "./Routes/analyticsRoutes.js";
+import staffRoutes from "./Routes/staffRoutes.js";
+import setupAdmin from "./Routes/setupAdmin.js";
+import mobileRoutes from "./Routes/mobileRoutes.js";
+import mobileUpload from "./Routes/mobileUpload.js";
+import mobileOrderRoutes from "./Routes/mobileOrderRoutes.js";
+
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
