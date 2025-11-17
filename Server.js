@@ -16,7 +16,6 @@ import setupAdmin from "./routes/setupAdmin.js";
 import mobileRoutes from "./routes/mobileRoutes.js";
 import mobileUpload from "./routes/mobileUpload.js";
 import mobileOrderRoutes from "./routes/mobileOrderRoutes.js";
-
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
