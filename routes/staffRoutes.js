@@ -4,9 +4,7 @@ import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
-// ======================
 // ADD STAFF
-// ======================
 router.post("/add", async (req, res) => {
   try {
     const { name, password } = req.body;
@@ -35,9 +33,7 @@ router.post("/add", async (req, res) => {
   }
 });
 
-// ======================
 // STAFF LOGIN
-// ======================
 router.post("/login", async (req, res) => {
   try {
     const { name, password } = req.body;
@@ -65,9 +61,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ======================
 // LIST STAFF
-// ======================
 router.get("/list", async (req, res) => {
   try {
     const staff = await Staff.find({ role: "staff" });
@@ -78,9 +72,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
-// ======================
 // DELETE STAFF
-// ======================
 router.delete("/delete/:id", async (req, res) => {
   try {
     await Staff.findByIdAndDelete(req.params.id);
