@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     // TOTAL ORDERS
     const totalOrders = orders.length;
 
-    // FIXED: PRODUCTS SOLD
+    // PRODUCTS SOLD
     const totalProductsSold = orders.reduce(
       (sum, o) =>
         sum + (o.items?.reduce((s, p) => s + p.qty, 0) || 0),
@@ -24,20 +24,21 @@ router.get("/", async (req, res) => {
 
     // WEEKLY SALES
     const weeklySales = [
-  { day: "Sun", sales: 0 },
-  { day: "Mon", sales: 0 },
-  { day: "Tue", sales: 0 },
-  { day: "Wed", sales: 0 },
-  { day: "Thu", sales: 0 },
-  { day: "Fri", sales: 0 },
-  { day: "Sat", sales: 0 },
-];
-
+      { day: "Sun", sales: 0 },
+      { day: "Mon", sales: 0 },
+      { day: "Tue", sales: 0 },
+      { day: "Wed", sales: 0 },
+      { day: "Thu", sales: 0 },
+      { day: "Fri", sales: 0 },
+      { day: "Sat", sales: 0 },
+    ];
 
     orders.forEach((o) => {
-      const dayIndex = new Date(o.createdAt).getDay();
-      const dayName = dayNames[dayIndex];
-      const bucket = weeklySales.find((d) => d.day === dayName);
+      const dateValue = o.date || o.createdAt; // ✅ fallback
+      if (!dateValue) return;
+
+      const dayIndex = new Date(dateValue).getDay();
+      const bucket = weeklySales[dayIndex];
       if (bucket) bucket.sales += (o.total || 0);
     });
 
