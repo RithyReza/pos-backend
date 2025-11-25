@@ -17,9 +17,9 @@ const OrderSchema = new mongoose.Schema(
     items: [ItemSchema],
     total: Number,
     cashGiven: Number,
-    date: { type: Date, default: Date.now }, // 👈 you use "date" in orders route
+    date: { type: Date, default: Date.now },
   },
-  { timestamps: true } // createdAt / updatedAt also available
+  { timestamps: true }
 );
 
 export default mongoose.model("Order", OrderSchema, "orders");

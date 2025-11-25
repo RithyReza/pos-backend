@@ -21,21 +21,24 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+
+// ✅ SOCKET.IO
 const io = new IOServer(server, {
   cors: { origin: "*" },
 });
 
+// ✅ make io available to routes
 app.locals.io = io;
 
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// ✅ FIXED MONGO CONNECT
+// ✅ MONGO CONNECT (Atlas + correct DB)
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB Error:", err.message));
+  .then(() => console.log("✅ MongoDB Connected to Atlas (posSystem)"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err.message));
 
 // ✅ ROUTES
 app.use("/api/auth", authRoutes);
@@ -48,16 +51,23 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/setup", setupAdmin);
 
-// extra mobile routes
+// ✅ extra mobile routes
 app.use("/api/mobile", mobileRoutes);
 app.use("/api/mobile-upload", mobileUpload);
 
 app.get("/", (req, res) => res.send("Backend running ✔"));
 
+// ✅ SOCKET LOGS
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
-  socket.on("disconnect", () => console.log("Socket disconnected:", socket.id));
+
+  socket.on("disconnect", () =>
+    console.log("Socket disconnected:", socket.id)
+  );
 });
 
+// ✅ START SERVER
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+server.listen(PORT, () =>
+  console.log(`✅ Server running on port ${PORT}`)
+);
