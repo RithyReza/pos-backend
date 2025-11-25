@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import User from "../models/User.js";
+import User from "../models/user.js";
 import { verifyToken, requireAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();

@@ -10,4 +10,4 @@ const StaffSchema = new mongoose.Schema(
 );
 
 // 👇 force collection name = "staffs"
-export default mongoose.model("Staff", StaffSchema, "staffs");
+export default mongoose.model("staff", StaffSchema, "staffs");
