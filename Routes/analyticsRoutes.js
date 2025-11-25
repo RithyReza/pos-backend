@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
     // PRODUCTS SOLD
     const totalProductsSold = orders.reduce(
       (sum, o) =>
-        sum + (o.items?.reduce((s, p) => s + p.qty, 0) || 0),
+        sum + (o.items?.reduce((s, p) => s + (p.qty || 0), 0) || 0),
       0
     );
 
@@ -34,24 +34,27 @@ router.get("/", async (req, res) => {
     ];
 
     orders.forEach((o) => {
-      const dateValue = o.date || o.createdAt; // ✅ fallback
+      const dateValue = o.date || o.createdAt;
       if (!dateValue) return;
 
-      const dayIndex = new Date(dateValue).getDay();
+      const d = new Date(dateValue);
+      if (Number.isNaN(d.getTime())) return;
+
+      const dayIndex = d.getDay();
       const bucket = weeklySales[dayIndex];
       if (bucket) bucket.sales += (o.total || 0);
     });
 
     res.json({
+      success: true,
       totalSales,
       totalOrders,
       totalProductsSold,
       weeklySales,
     });
-
   } catch (err) {
     console.log("Analytics error:", err);
-    res.status(500).json({ error: "Failed" });
+    res.status(500).json({ success: false, error: "Failed to load analytics" });
   }
 });
 

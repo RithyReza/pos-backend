@@ -22,25 +22,22 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = new IOServer(server, {
-  cors: { origin: "*" }
+  cors: { origin: "*" },
 });
 
-// make io available to routes via app.locals
 app.locals.io = io;
 
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// ✅ MongoDB connect (fixed)
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+// ✅ FIXED MONGO CONNECT
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.error("❌ MongoDB Error:", err.message));
+  .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
-// ✅ routes
+// ✅ ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/orders", orderRoutes);
@@ -51,19 +48,16 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/setup", setupAdmin);
 
-// ✅ mobile routes
+// extra mobile routes
 app.use("/api/mobile", mobileRoutes);
 app.use("/api/mobile-upload", mobileUpload);
 
 app.get("/", (req, res) => res.send("Backend running ✔"));
 
-// ✅ socket log
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
   socket.on("disconnect", () => console.log("Socket disconnected:", socket.id));
 });
 
-// ✅ Start server
-server.listen(process.env.PORT || 5000, () =>
-  console.log(`✅ Server running on port ${process.env.PORT || 5000}`)
-);
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
