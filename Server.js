@@ -16,7 +16,9 @@ import setupAdmin from "./routes/setupAdmin.js";
 import mobileRoutes from "./routes/mobileRoutes.js";
 import mobileUpload from "./routes/mobileUpload.js";
 import mobileOrderRoutes from "./routes/mobileOrderRoutes.js";
+
 dotenv.config();
+
 const app = express();
 const server = http.createServer(app);
 const io = new IOServer(server, {
@@ -30,12 +32,15 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// connect
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected ✔"))
-  .catch(err => console.error(err));
+// ✅ MongoDB connect (fixed)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch(err => console.error("❌ MongoDB Error:", err.message));
 
-// routes
+// ✅ routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/orders", orderRoutes);
@@ -46,18 +51,19 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/setup", setupAdmin);
 
-// mobile routes (scan uploads etc)
+// ✅ mobile routes
 app.use("/api/mobile", mobileRoutes);
 app.use("/api/mobile-upload", mobileUpload);
 
 app.get("/", (req, res) => res.send("Backend running ✔"));
 
-// Socket connection log
+// ✅ socket log
 io.on("connection", socket => {
   console.log("Socket connected:", socket.id);
   socket.on("disconnect", () => console.log("Socket disconnected:", socket.id));
 });
 
+// ✅ Start server
 server.listen(process.env.PORT || 5000, () =>
-  console.log(`Server on ${process.env.PORT || 5000}`)
+  console.log(`✅ Server running on port ${process.env.PORT || 5000}`)
 );
