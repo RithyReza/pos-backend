@@ -18,8 +18,8 @@ router.post("/add-to-order", async (req, res) => {
       return res.json({ success: false, message: "Product not found" });
     }
 
-    // Emit to POS via socket.io
-    req.app.locals.io.emit("cart:add", {
+    // ✅ Emit to POS via socket.io
+    req.app.locals.io.emit("order:add", {
       _id: product._id,
       name: product.name,
       price: product.price,
