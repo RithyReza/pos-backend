@@ -3,22 +3,16 @@ import Product from "../models/product.js";
 
 const router = express.Router();
 
-// POST: add product to POS order via barcode scan
 router.post("/add-to-order", async (req, res) => {
   try {
     const { barcode } = req.body;
 
-    if (!barcode)
-      return res.json({ success: false, message: "No barcode provided" });
-
-    // Find product
     const product = await Product.findOne({ barcode });
 
     if (!product) {
       return res.json({ success: false, message: "Product not found" });
     }
 
-    // ✅ Emit to POS via socket.io
     req.app.locals.io.emit("order:add", {
       _id: product._id,
       name: product.name,
